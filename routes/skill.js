@@ -109,4 +109,30 @@ router.patch('/:skillId', async (req, res) => {
   }
 });
 
+// PATCH route to update profile details (including optional profile picture)
+router.patch('/:skillId/details', upload.single('profilePicture'), async (req, res) => {
+  const { profileName, preferredLanguage, educationalBackground } = req.body;
+  const profilePicture = req.file ? `/uploads/profilePictures/${req.file.filename}` : null;
+  
+  const updatedFields = {
+    profileName,
+    preferredLanguage,
+    educationalBackground,
+    ...(profilePicture && { profilePicture })
+  };
+
+  try {
+    const updatedSkill = await Skill.findByIdAndUpdate(req.params.skillId, updatedFields, { new: true });
+    if (!updatedSkill) {
+      return res.status(404).json({ message: 'Skill not found' });
+    }
+    res.json(updatedSkill);
+  } catch (error) {
+    console.error('Error updating skill details:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
 module.exports = router;

@@ -310,7 +310,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// PATCH route to update form data by ID
 router.patch('/:id', upload.fields([ 
   { name: 'roadmapIntroduction', maxCount: 1 },
   { name: 'firstChapter', maxCount: 1 },
@@ -329,6 +328,13 @@ router.patch('/:id', upload.fields([
     const { id } = req.params;
     const updatedData = req.body;
 
+    // Fetch current form data to retain existing files if not updated
+    const currentFormData = await FormData.findById(id);
+
+    if (!currentFormData) {
+      return res.status(404).json({ message: 'Form data not found' });
+    }
+
     const updatedFields = {
       languages: updatedData.languages,
       courseDescription: updatedData.courseDescription,
@@ -336,26 +342,22 @@ router.patch('/:id', upload.fields([
       targetAudience: updatedData.targetAudience,
       courseCategory: updatedData.courseCategory,
       pdfPrice: updatedData.pdfPrice,
-      roadmapIntroduction: req.files.roadmapIntroduction ? req.files.roadmapIntroduction[0].filename : null,
-      firstChapter: req.files.firstChapter ? req.files.firstChapter[0].filename : null,
-      secondChapter: req.files.secondChapter ? req.files.secondChapter[0].filename : null,
-      thirdChapter: req.files.thirdChapter ? req.files.thirdChapter[0].filename : null,
-      fourthChapter: req.files.fourthChapter ? req.files.fourthChapter[0].filename : null,
-      fifthChapter: req.files.fifthChapter ? req.files.fifthChapter[0].filename : null,
-      sixthChapter: req.files.sixthChapter ? req.files.sixthChapter[0].filename : null,
-      seventhChapter: req.files.seventhChapter ? req.files.seventhChapter[0].filename : null,
-      eighthChapter: req.files.eighthChapter ? req.files.eighthChapter[0].filename : null,
-      ninthChapter: req.files.ninthChapter ? req.files.ninthChapter[0].filename : null,
-      tenthChapter: req.files.tenthChapter ? req.files.tenthChapter[0].filename : null,
-      image: req.files.image ? req.files.image[0].filename : null
+      roadmapIntroduction: req.files.roadmapIntroduction ? req.files.roadmapIntroduction[0].filename : currentFormData.roadmapIntroduction,
+      firstChapter: req.files.firstChapter ? req.files.firstChapter[0].filename : currentFormData.firstChapter,
+      secondChapter: req.files.secondChapter ? req.files.secondChapter[0].filename : currentFormData.secondChapter,
+      thirdChapter: req.files.thirdChapter ? req.files.thirdChapter[0].filename : currentFormData.thirdChapter,
+      fourthChapter: req.files.fourthChapter ? req.files.fourthChapter[0].filename : currentFormData.fourthChapter,
+      fifthChapter: req.files.fifthChapter ? req.files.fifthChapter[0].filename : currentFormData.fifthChapter,
+      sixthChapter: req.files.sixthChapter ? req.files.sixthChapter[0].filename : currentFormData.sixthChapter,
+      seventhChapter: req.files.seventhChapter ? req.files.seventhChapter[0].filename : currentFormData.seventhChapter,
+      eighthChapter: req.files.eighthChapter ? req.files.eighthChapter[0].filename : currentFormData.eighthChapter,
+      ninthChapter: req.files.ninthChapter ? req.files.ninthChapter[0].filename : currentFormData.ninthChapter,
+      tenthChapter: req.files.tenthChapter ? req.files.tenthChapter[0].filename : currentFormData.tenthChapter,
+      image: req.files.image ? req.files.image[0].filename : currentFormData.image
     };
 
     // Update the FormData by its ID
     const updatedFormData = await FormData.findByIdAndUpdate(id, updatedFields, { new: true });
-
-    if (!updatedFormData) {
-      return res.status(404).json({ message: 'Form data not found' });
-    }
 
     res.json({ message: 'Form data updated successfully', formData: updatedFormData });
   } catch (error) {
@@ -363,6 +365,5 @@ router.patch('/:id', upload.fields([
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
-
 
 module.exports = router;
