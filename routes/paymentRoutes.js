@@ -41,7 +41,16 @@ const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Stripe Secret Key from .env
 const Payment = require('../models/paymentModel');
+const nodemailer = require('nodemailer');
 
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // or your email service
+    auth: {
+        user: process.env.EMAIL_USER, // Your email address
+        pass: process.env.EMAIL_PASS  // Your email password (consider using app-specific password)
+    }
+});
 // Payment route
 router.post('/', async (req, res) => {
     const { token, product, payer, payingTo } = req.body;
