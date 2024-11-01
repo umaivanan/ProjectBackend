@@ -1,52 +1,52 @@
-// const express = require('express');
-// const router = express.Router();
-// const nodemailer = require('nodemailer');
+// emailRoutes.js
+const express = require('express');
+const nodemailer = require('nodemailer');
+const router = express.Router();
+require('dotenv').config(); // Load environment variables from .env file
 
-// // Nodemailer transporter ஐ அமைத்தல்
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: process.env.EMAIL_USER,
-//     pass: process.env.EMAIL_PASS,
-//   },
-// });
+// Configure the email transporter using environment variables
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // Use the email user from .env
+    pass: process.env.EMAIL_PASS, // Use the email password from .env
+  },
+});
 
-// // payer க்கு email அனுப்பும் Route
-// router.post('/sendEmailToPayer', async (req, res) => {
-//   const { payerEmail } = req.body;
-//   const mailOptions = {
-//     from: process.env.EMAIL_USER,
-//     to: payerEmail,
-//     subject: 'Payment Confirmation',
-//     text: 'Thank you for your payment. Your transaction was successful!',
-//   };
+// Route to send email to Payer
+router.post('/api/send-email/payer', async (req, res) => {
+  const { email } = req.body;
+  const mailOptions = {
+    from: process.env.EMAIL_USER, // Set from address to EMAIL_USER
+    to: email,
+    subject: 'Payment Received',
+    text: 'Your payment has been successfully received.',
+  };
 
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     res.status(200).json({ message: 'Email sent to payer successfully!' });
-//   } catch (error) {
-//     console.error('Error sending email to payer:', error);
-//     res.status(500).json({ error: 'Failed to send email to payer' });
-//   }
-// });
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send({ message: 'Email sent to payer successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error sending email to payer', error });
+  }
+});
 
-// // instructor க்கு email அனுப்பும் Route
-// router.post('/sendEmailToInstructor', async (req, res) => {
-//   const { instructorEmail } = req.body;
-//   const mailOptions = {
-//     from: process.env.EMAIL_USER,
-//     to: instructorEmail,
-//     subject: 'New Payment Received',
-//     text: 'A new payment has been received for your course!',
-//   };
+// Route to send email to Instructor
+router.post('/api/send-email/instructor', async (req, res) => {
+  const { email } = req.body;
+  const mailOptions = {
+    from: process.env.EMAIL_USER, // Set from address to EMAIL_USER
+    to: email,
+    subject: 'Payment Check',
+    text: 'Please check your payment.',
+  };
 
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     res.status(200).json({ message: 'Email sent to instructor successfully!' });
-//   } catch (error) {
-//     console.error('Error sending email to instructor:', error);
-//     res.status(500).json({ error: 'Failed to send email to instructor' });
-//   }
-// });
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).send({ message: 'Email sent to instructor successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error sending email to instructor', error });
+  }
+});
 
-// module.exports = router;
+module.exports = router;
