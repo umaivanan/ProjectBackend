@@ -154,7 +154,6 @@ const authRoutes = require('./routes/auth');
 const skillRoutes = require('./routes/skill');
 const formRoutes = require('./routes/formRoutes'); // Routes for handling form data
 const paymentRoutes = require('./routes/paymentRoutes');
-const emailRoutes = require('./routes/emailRoutes');
 
 // Initialize the Express app
 const app = express();
@@ -192,7 +191,6 @@ app.use('/api/auth', authRoutes); // Authentication routes
 app.use('/api/skills', skillRoutes); // Skill routes
 app.use('/api/formdata', formRoutes); // Route for handling form data
 app.use('/payment', paymentRoutes); // Payment routes for Stripe
-app.use('/api', emailRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
