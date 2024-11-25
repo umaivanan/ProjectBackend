@@ -65,7 +65,7 @@ router.post('/', async (req, res) => {
         });
 
         // Split the payment: 20% to admin, 80% to instructor
-        const adminPercentage = 20;
+        const adminPercentage = 10;
         const instructorPercentage = 80;
 
         const adminAmount = (product.price * adminPercentage) / 100; // Admin gets 20%
