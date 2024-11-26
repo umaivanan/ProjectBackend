@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -8,7 +7,7 @@ const fs = require('fs');
 const connectDB = require('./config/db'); // MongoDB connection
 const authRoutes = require('./routes/auth');
 const skillRoutes = require('./routes/skill');
-const formRoutes = require('./routes/formRoutes'); // Routes for handling form data
+const formRoutes = require('./routes/formRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
 // Initialize the Express app
@@ -27,7 +26,7 @@ app.use(express.json()); // Parse JSON encoded data
 const directories = [
   path.join(__dirname, 'uploads', 'profilePictures'),
   path.join(__dirname, 'pdfUploads'), // Directory for PDFs
-  path.join(__dirname, 'imageUploads'), // Directory for Images (NEW for imageUploads)
+  path.join(__dirname, 'imageUploads'), // Directory for Images
 ];
 
 // Create directories if they don't exist
@@ -37,16 +36,16 @@ directories.forEach((dir) => {
   }
 });
 
-// Serve static files from the 'uploads', 'pdfUploads', and 'imageUploads' folders
+// Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/pdfUploads', express.static(path.join(__dirname, 'pdfUploads')));
-app.use('/imageUploads', express.static(path.join(__dirname, 'imageUploads'))); // Serve image files (NEW)
+app.use('/imageUploads', express.static(path.join(__dirname, 'imageUploads')));
 
 // Routes
-app.use('/api/auth', authRoutes); // Authentication routes
-app.use('/api/skills', skillRoutes); // Skill routes
-app.use('/api/formdata', formRoutes); // Route for handling form data
-app.use('/payment', paymentRoutes); // Payment routes for Stripe
+app.use('/api/auth', authRoutes);
+app.use('/api/skills', skillRoutes);
+app.use('/api/formdata', formRoutes);
+app.use('/payment', paymentRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
