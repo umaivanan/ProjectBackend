@@ -8,7 +8,7 @@ const connectDB = require('./config/db'); // MongoDB connection
 const authRoutes = require('./routes/auth');
 const skillRoutes = require('./routes/skill');
 const formRoutes = require('./routes/formRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
+// const paymentRoutes = require('./routes/paymentRoutes');
 
 // Initialize the Express app
 const app = express();
@@ -45,7 +45,7 @@ app.use('/imageUploads', express.static(path.join(__dirname, 'imageUploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/skills', skillRoutes);
 app.use('/api/formdata', formRoutes);
-app.use('/payment', paymentRoutes);
+// app.use('/payment', paymentRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
