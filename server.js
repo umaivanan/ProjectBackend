@@ -105,6 +105,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/pdfUploads', express.static(path.join(__dirname, 'pdfUploads')));
 app.use('/imageUploads', express.static(path.join(__dirname, 'imageUploads')));
 
+// Serve a placeholder for favicon.ico
+app.use('/favicon.ico', (req, res) => {
+  res.status(204).end(); // Respond with no content
+});
+
 // Define Base Route
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the backend!' });
